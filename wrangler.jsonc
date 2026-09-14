@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "marbles",
+  "compatibility_date": "2026-09-13",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "none",
+    "not_found_handling": "none"
+  },
+  "routes": [
+    { "pattern": "marbles.vibe-coded.com", "custom_domain": true }
+  ]
+}

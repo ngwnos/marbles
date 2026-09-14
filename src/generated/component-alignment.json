@@ -1,0 +1,622 @@
+{
+  "rise": 47,
+  "insertion": 15,
+  "ports": [
+    {
+      "piece": "coil",
+      "port": [
+        -70.03570517957252,
+        0
+      ],
+      "bottom": 94,
+      "shoulder": 141,
+      "tip": 156,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 8.292520316255381e-16
+        }
+      ]
+    },
+    {
+      "piece": "coil",
+      "port": [
+        70.03570517957252,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": null,
+      "tip": null,
+      "fits": [
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "starter funnel",
+      "port": [
+        0,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": null,
+      "tip": null,
+      "fits": [
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "start",
+      "port": [
+        0,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": null,
+      "tip": null,
+      "fits": [
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "hairpin",
+      "port": [
+        -70.03570517957252,
+        0
+      ],
+      "bottom": 47,
+      "shoulder": 94,
+      "tip": 109,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 0.0001450253059998796
+        },
+        {
+          "side": "below",
+          "overlap": 0.0023362066939089966
+        }
+      ]
+    },
+    {
+      "piece": "hairpin",
+      "port": [
+        70.03570517957252,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 3.9678796781171446e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "passing",
+      "port": [
+        -70.03570517957252,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 8.977193988179977e-16
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "passing",
+      "port": [
+        70.03570517957252,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 1.963219083828127e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "finish",
+      "port": [
+        0,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 2.592110553978344e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "split",
+      "port": [
+        80.87026647662293,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 2.2524300133386355e-16
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "split",
+      "port": [
+        -40.43513323831145,
+        70.03570517957253
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 3.7921055184853e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "split",
+      "port": [
+        -40.4351332383115,
+        -70.0357051795725
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 1.947227101783966e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "jump",
+      "port": [
+        -69,
+        0
+      ],
+      "bottom": 94,
+      "shoulder": 141,
+      "tip": 156,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 7.23119480960932e-15
+        },
+        {
+          "side": "below",
+          "overlap": 5.2475385148298415e-15
+        }
+      ]
+    },
+    {
+      "piece": "jump",
+      "port": [
+        69,
+        24
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 4.375026657703454e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "landing",
+      "port": [
+        -55,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 2.3054474995731766e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "base",
+      "port": [
+        -12,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 6.396738607555852e-15
+        }
+      ]
+    },
+    {
+      "piece": "spacer",
+      "port": [
+        0,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 1.970645868709653e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "standard ramp",
+      "port": [
+        -69,
+        -24
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 4.3576253716537394e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "standard ramp",
+      "port": [
+        69,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 1.4520177595012118e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "funnel",
+      "port": [
+        -136.12861565446116,
+        -33
+      ],
+      "bottom": 47,
+      "shoulder": 94,
+      "tip": 109,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 6.306695617130931e-15
+        },
+        {
+          "side": "below",
+          "overlap": 5.105291189799743e-15
+        }
+      ]
+    },
+    {
+      "piece": "funnel",
+      "port": [
+        0,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": null,
+      "tip": null,
+      "fits": [
+        {
+          "side": "below",
+          "overlap": 5.18593486736722e-16
+        }
+      ]
+    },
+    {
+      "piece": "snake",
+      "port": [
+        -70.03570517957252,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 3.811187476721045e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "snake",
+      "port": [
+        70.03570517957252,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 3.498395149958977e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "maze",
+      "port": [
+        -70.03570517957252,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 1.2975731600306517e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "maze",
+      "port": [
+        70.03570517957252,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 9.675420187260642e-16
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "bumper",
+      "port": [
+        -70.03570517957252,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 9.142822810686083e-16
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "bumper",
+      "port": [
+        70.03570517957252,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 1.5726894612988485e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "intersection",
+      "port": [
+        80.87026647662293,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 9.367506770274758e-17
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "intersection",
+      "port": [
+        -40.43513323831145,
+        70.03570517957253
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 3.1906545276943338e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "intersection",
+      "port": [
+        -40.4351332383115,
+        -70.0357051795725
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 2.9741833995622358e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    },
+    {
+      "piece": "paddle",
+      "port": [
+        -69,
+        -24
+      ],
+      "bottom": 47,
+      "shoulder": 94,
+      "tip": 109,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 6.073976332427686e-15
+        },
+        {
+          "side": "below",
+          "overlap": 6.379011902035714e-15
+        }
+      ]
+    },
+    {
+      "piece": "paddle",
+      "port": [
+        69,
+        0
+      ],
+      "bottom": 0,
+      "shoulder": 47,
+      "tip": 62,
+      "fits": [
+        {
+          "side": "above",
+          "overlap": 4.2010665779468326e-15
+        },
+        {
+          "side": "below",
+          "overlap": 0
+        }
+      ]
+    }
+  ]
+}

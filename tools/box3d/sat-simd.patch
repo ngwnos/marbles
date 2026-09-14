@@ -1,0 +1,135 @@
+--- a/src/convex_manifold.c
++++ b/src/convex_manifold.c
+@@ -11,6 +11,10 @@
+ 
+ #include <stdbool.h>
+ #include <stddef.h>
++#include <stdlib.h>
++#if defined( B3_SIMD_SSE2 )
++#include <emmintrin.h>
++#endif
+ 
+ static inline bool b3IsMinkowskiFaceIsolated( b3Vec3 a, b3Vec3 b, b3Vec3 n )
+ {
+@@ -230,7 +234,8 @@
+ 	};
+ }
+ 
+-static b3EdgeQuery b3QueryEdgeDirections( const b3HullData* hullA, const b3HullData* hullB, b3Transform transformBtoA )
++#if !defined( B3_SIMD_SSE2 ) || defined( B3_VALIDATE_EDGE_SIMD )
++static b3EdgeQuery b3QueryEdgeDirectionsScalar( const b3HullData* hullA, const b3HullData* hullB, b3Transform transformBtoA )
+ {
+ 	// Find axis of minimum penetration
+ 	float maxSeparation = -FLT_MAX;
+@@ -307,6 +312,111 @@
+ 		.indexB = maxIndexB,
+ 	};
+ }
++
++#endif
++
++#if defined( B3_SIMD_SSE2 )
++// Each SIMD lane is a different edge, so dot products retain the scalar
++// operation order. The surviving pairs are still visited in original order.
++typedef struct b3EdgeSATBlock
++{
++	b3Vec3 q[4], e[4];
++	__m128 ex, ey, ez, ux, uy, uz, vx, vy, vz;
++} b3EdgeSATBlock;
++
++static inline __m128 b3DotEdgeLanes( __m128 x, __m128 y, __m128 z, b3Vec3 b )
++{
++	return _mm_add_ps( _mm_add_ps( _mm_mul_ps( x, _mm_set1_ps( b.x ) ),
++		_mm_mul_ps( y, _mm_set1_ps( b.y ) ) ), _mm_mul_ps( z, _mm_set1_ps( b.z ) ) );
++}
++#endif
++
++static b3EdgeQuery b3QueryEdgeDirections( const b3HullData* hullA, const b3HullData* hullB, b3Transform transformBtoA )
++{
++#if !defined( B3_SIMD_SSE2 )
++	return b3QueryEdgeDirectionsScalar( hullA, hullB, transformBtoA );
++#else
++	const b3HullHalfEdge* edgesA = b3GetHullEdges( hullA );
++	const b3Vec3* pointsA = b3GetHullPoints( hullA );
++	const b3Plane* planesA = b3GetHullPlanes( hullA );
++	const b3HullHalfEdge* edgesB = b3GetHullEdges( hullB );
++	const b3Vec3* pointsB = b3GetHullPoints( hullB );
++	const b3Plane* planesB = b3GetHullPlanes( hullB );
++	// Hull half-edge indices are uint8_t. Four unique edges per block.
++	b3EdgeSATBlock blocks[32];
++	const int count = ( hullA->edgeCount + 7 ) / 8;
++	B3_ASSERT( count <= 32 );
++	for ( int block = 0; block < count; ++block )
++	{
++		float lanes[9][4] = { 0 };
++		for ( int lane = 0; lane < 4; ++lane )
++		{
++			int indexA = block * 8 + lane * 2;
++			if ( indexA >= hullA->edgeCount ) break;
++			const b3HullHalfEdge* edgeA = edgesA + indexA;
++			const b3HullHalfEdge* twinA = edgeA + 1;
++			b3Vec3 q = pointsA[twinA->origin];
++			b3Vec3 e = b3Sub( q, pointsA[edgeA->origin] );
++			b3Vec3 u = planesA[edgeA->face].normal;
++			b3Vec3 v = planesA[twinA->face].normal;
++			blocks[block].q[lane] = q;
++			blocks[block].e[lane] = e;
++			lanes[0][lane] = e.x; lanes[1][lane] = e.y; lanes[2][lane] = e.z;
++			lanes[3][lane] = u.x; lanes[4][lane] = u.y; lanes[5][lane] = u.z;
++			lanes[6][lane] = v.x; lanes[7][lane] = v.y; lanes[8][lane] = v.z;
++		}
++		b3EdgeSATBlock* p = blocks + block;
++		p->ex = _mm_loadu_ps( lanes[0] ); p->ey = _mm_loadu_ps( lanes[1] ); p->ez = _mm_loadu_ps( lanes[2] );
++		p->ux = _mm_loadu_ps( lanes[3] ); p->uy = _mm_loadu_ps( lanes[4] ); p->uz = _mm_loadu_ps( lanes[5] );
++		p->vx = _mm_loadu_ps( lanes[6] ); p->vy = _mm_loadu_ps( lanes[7] ); p->vz = _mm_loadu_ps( lanes[8] );
++	}
++	b3Matrix3 matrix = b3MakeMatrixFromQuat( transformBtoA.q );
++	b3Vec3 centerB = b3TransformPoint( transformBtoA, hullB->center );
++	b3EdgeQuery result = { .separation = -FLT_MAX, .indexA = B3_NULL_INDEX, .indexB = B3_NULL_INDEX };
++	for ( int indexB = 0; indexB < hullB->edgeCount; indexB += 2 )
++	{
++		const b3HullHalfEdge* edgeB = edgesB + indexB;
++		const b3HullHalfEdge* twinB = edgeB + 1;
++		b3Vec3 qB = pointsB[twinB->origin];
++		b3Vec3 eB = b3MulMV( matrix, b3Sub( qB, pointsB[edgeB->origin] ) );
++		qB = b3Add( b3MulMV( matrix, qB ), transformBtoA.p );
++		b3Vec3 uB = b3MulMV( matrix, planesB[edgeB->face].normal );
++		b3Vec3 vB = b3MulMV( matrix, planesB[twinB->face].normal );
++		for ( int block = 0; block < count; ++block )
++		{
++			const b3EdgeSATBlock* p = blocks + block;
++			__m128 cba = b3DotEdgeLanes( p->ex, p->ey, p->ez, uB );
++			__m128 dba = b3DotEdgeLanes( p->ex, p->ey, p->ez, vB );
++			__m128 crosses = _mm_cmplt_ps( _mm_mul_ps( cba, dba ), _mm_setzero_ps() );
++			if ( _mm_movemask_ps( crosses ) == 0 ) continue;
++			// Negate after each dot, as in the scalar predicate.
++			__m128 adc = _mm_sub_ps( _mm_setzero_ps(), b3DotEdgeLanes( p->ux, p->uy, p->uz, eB ) );
++			__m128 bdc = _mm_sub_ps( _mm_setzero_ps(), b3DotEdgeLanes( p->vx, p->vy, p->vz, eB ) );
++			__m128 valid = _mm_and_ps( crosses, _mm_and_ps(
++				_mm_cmplt_ps( _mm_mul_ps( adc, bdc ), _mm_setzero_ps() ),
++				_mm_cmpgt_ps( _mm_mul_ps( cba, bdc ), _mm_setzero_ps() ) ) );
++			int mask = _mm_movemask_ps( valid );
++			for ( int lane = 0; lane < 4; ++lane )
++			{
++				if ( ( mask & ( 1 << lane ) ) == 0 ) continue;
++				float separation = b3EdgeEdgeSeparation( p->q[lane], p->e[lane], hullA->center, qB, eB, centerB );
++				if ( separation > result.separation )
++				{
++					result.separation = separation;
++					result.indexA = block * 8 + lane * 2;
++					result.indexB = indexB;
++				}
++			}
++		}
++	}
++#if defined( B3_VALIDATE_EDGE_SIMD )
++	b3EdgeQuery scalar = b3QueryEdgeDirectionsScalar( hullA, hullB, transformBtoA );
++	if ( result.separation != scalar.separation || result.indexA != scalar.indexA || result.indexB != scalar.indexB ) abort();
++#endif
++	return result;
++#endif
++}
++
+ 
+ // Reduce the manifold points to a maximum of 4 points.
+ // Note: this modifies the input point array to improve performance

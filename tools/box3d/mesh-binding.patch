@@ -1,0 +1,57 @@
+--- a/csrc/glue.cpp
++++ b/csrc/glue.cpp
+@@ -773,6 +773,24 @@
+ {
+ };
+ 
++// Owns mesh data; keep alive until every referencing world is destroyed.
++struct MeshGeometry {
++ b3MeshData* data;
++ MeshGeometry(val opts) {
++  val vp=opts["vertices"], ip=opts["indices"];
++  std::vector<b3Vec3> vertices;
++  for(int i=0;i<vp["length"].as<int>();i+=3)
++   vertices.push_back({vp[i].as<float>(),vp[i+1].as<float>(),vp[i+2].as<float>()});
++  std::vector<int32_t> indices;
++  for(int i=0;i<ip["length"].as<int>();i++) indices.push_back(ip[i].as<int>());
++  b3MeshDef def={}; def.vertices=vertices.data(); def.indices=indices.data();
++  def.vertexCount=vertices.size(); def.triangleCount=indices.size()/3;
++  def.weldVertices=true; def.weldTolerance=0.00001f; def.identifyEdges=true;
++  data=b3CreateMesh(&def,nullptr,0);
++ }
++ ~MeshGeometry(){if(data)b3DestroyMesh(data);}
++};
++
+ struct Body
+ {
+ 	b3BodyId id;
+@@ -1124,6 +1142,11 @@
+ 		return shape;
+ 	}
+ 
++ Shape createMesh(const MeshGeometry& mesh,val opts) {
++  b3ShapeDef def=shapeDefFromOpts(opts);
++  return {b3CreateMeshShape(id,&def,mesh.data,{1,1,1})};
++ }
++
+ 	Shape createHull( val opts )
+ 	{
+ 		b3ShapeDef def = shapeDefFromOpts( opts );
+@@ -1624,6 +1647,7 @@
+ EMSCRIPTEN_BINDINGS( box3d )
+ {
+ 	using namespace emscripten;
++ class_<MeshGeometry>("MeshGeometry").constructor<val>();
+ 
+ #ifdef __EMSCRIPTEN_PTHREADS__
+ 	constant( "threaded", true );
+@@ -1711,7 +1735,8 @@
+ 		.function( "createSphere", &Body::createSphere )
+ 		.function( "createCapsule", &Body::createCapsule )
+ 		.function( "createBox", &Body::createBox )
+-		.function( "createHull", &Body::createHull );
++		.function( "createHull", &Body::createHull )
++  .function( "createMesh", &Body::createMesh );
+ 
+ 	class_<Shape>( "Shape" )
+ 		.function( "isValid", &Shape::isValid )

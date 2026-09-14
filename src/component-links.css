@@ -1,0 +1,6 @@
+.component-links{position:static;display:grid;gap:5px;margin:0 0 28px}
+.component-links a{display:block;padding:8px 10px;border-radius:6px;text-decoration:none;color:#4b665b;font-size:14px}
+.component-links a:first-child{padding-left:0;margin-bottom:5px}
+.component-links a:hover{background:#e9ebe5}
+.component-links a[aria-current="page"]{background:#dfe7de;color:#263e2d;font-weight:600}
+.component-links a:focus-visible{outline:2px solid #4b665b;outline-offset:2px}

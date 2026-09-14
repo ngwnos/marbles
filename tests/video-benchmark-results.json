@@ -1,0 +1,329 @@
+{
+  "scene": {
+    "pieces": 90,
+    "marbles": 6,
+    "physics": "frozen",
+    "backend": "WebGPU",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+  },
+  "results": [
+    {
+      "width": 3840,
+      "height": 2160,
+      "mode": "encode",
+      "frames": 240,
+      "seconds": 3.2613999999761583,
+      "fps": 73.58802968104325,
+      "realtime60": 1.226467161350721,
+      "frameCreationMs": 0.0350000003973643,
+      "encodedFrames": 240,
+      "encodedBytes": 22481045,
+      "maxEncodeQueue": 9,
+      "config": {
+        "codec": "avc1.640034",
+        "width": 3840,
+        "height": 2160,
+        "framerate": 60,
+        "bitrate": 45000000,
+        "hardwareAcceleration": "prefer-hardware",
+        "latencyMode": "quality",
+        "avc": {
+          "format": "annexb"
+        }
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "mode": "render",
+      "frames": 1200,
+      "seconds": 1.7498999999761582,
+      "fps": 685.7534716362933,
+      "realtime60": 11.429224527271554,
+      "frameCreationMs": 0,
+      "encodedFrames": 0,
+      "encodedBytes": 0,
+      "maxEncodeQueue": 0
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "mode": "encode",
+      "frames": 1200,
+      "seconds": 4.294100000023842,
+      "fps": 279.45320323079045,
+      "realtime60": 4.657553387179841,
+      "frameCreationMs": 0.021999999980131784,
+      "encodedFrames": 1200,
+      "encodedBytes": 39860832,
+      "maxEncodeQueue": 9,
+      "config": {
+        "codec": "avc1.640034",
+        "width": 1920,
+        "height": 1080,
+        "framerate": 60,
+        "bitrate": 16000000,
+        "hardwareAcceleration": "prefer-hardware",
+        "latencyMode": "quality",
+        "avc": {
+          "format": "annexb"
+        }
+      }
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mode": "render",
+      "frames": 1200,
+      "seconds": 4.032399999976158,
+      "fps": 297.58952485048485,
+      "realtime60": 4.959825414174748,
+      "frameCreationMs": 0,
+      "encodedFrames": 0,
+      "encodedBytes": 0,
+      "maxEncodeQueue": 0
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mode": "encode",
+      "frames": 1200,
+      "seconds": 16.59730000001192,
+      "fps": 72.30091641406362,
+      "realtime60": 1.205015273567727,
+      "frameCreationMs": 0.0316666671137015,
+      "encodedFrames": 1200,
+      "encodedBytes": 112760422,
+      "maxEncodeQueue": 9,
+      "config": {
+        "codec": "avc1.640034",
+        "width": 3840,
+        "height": 2160,
+        "framerate": 60,
+        "bitrate": 45000000,
+        "hardwareAcceleration": "prefer-hardware",
+        "latencyMode": "quality",
+        "avc": {
+          "format": "annexb"
+        }
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "mode": "encode",
+      "frames": 1200,
+      "seconds": 4.294800000011921,
+      "fps": 279.4076557689926,
+      "realtime60": 4.656794262816542,
+      "frameCreationMs": 0.020833334177732466,
+      "encodedFrames": 1200,
+      "encodedBytes": 39860832,
+      "maxEncodeQueue": 9,
+      "config": {
+        "codec": "avc1.640034",
+        "width": 1920,
+        "height": 1080,
+        "framerate": 60,
+        "bitrate": 16000000,
+        "hardwareAcceleration": "prefer-hardware",
+        "latencyMode": "quality",
+        "avc": {
+          "format": "annexb"
+        }
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "mode": "render",
+      "frames": 1200,
+      "seconds": 1.6967999999523162,
+      "fps": 707.2135785205814,
+      "realtime60": 11.786892975343024,
+      "frameCreationMs": 0,
+      "encodedFrames": 0,
+      "encodedBytes": 0,
+      "maxEncodeQueue": 0
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mode": "encode",
+      "frames": 1200,
+      "seconds": 16.260600000023842,
+      "fps": 73.79801483329277,
+      "realtime60": 1.229966913888213,
+      "frameCreationMs": 0.02858333279689153,
+      "encodedFrames": 1200,
+      "encodedBytes": 112760422,
+      "maxEncodeQueue": 9,
+      "config": {
+        "codec": "avc1.640034",
+        "width": 3840,
+        "height": 2160,
+        "framerate": 60,
+        "bitrate": 45000000,
+        "hardwareAcceleration": "prefer-hardware",
+        "latencyMode": "quality",
+        "avc": {
+          "format": "annexb"
+        }
+      }
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mode": "render",
+      "frames": 1200,
+      "seconds": 4.1875,
+      "fps": 286.56716417910445,
+      "realtime60": 4.776119402985074,
+      "frameCreationMs": 0,
+      "encodedFrames": 0,
+      "encodedBytes": 0,
+      "maxEncodeQueue": 0
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "mode": "render",
+      "frames": 1200,
+      "seconds": 1.7241000000238418,
+      "fps": 696.0153123272465,
+      "realtime60": 11.60025520545411,
+      "frameCreationMs": 0,
+      "encodedFrames": 0,
+      "encodedBytes": 0,
+      "maxEncodeQueue": 0
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "mode": "encode",
+      "frames": 1200,
+      "seconds": 4.291899999976158,
+      "fps": 279.5964491266493,
+      "realtime60": 4.659940818777488,
+      "frameCreationMs": 0.02183333218097687,
+      "encodedFrames": 1200,
+      "encodedBytes": 39851399,
+      "maxEncodeQueue": 9,
+      "config": {
+        "codec": "avc1.640034",
+        "width": 1920,
+        "height": 1080,
+        "framerate": 60,
+        "bitrate": 16000000,
+        "hardwareAcceleration": "prefer-hardware",
+        "latencyMode": "quality",
+        "avc": {
+          "format": "annexb"
+        }
+      }
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mode": "render",
+      "frames": 1200,
+      "seconds": 4.368899999976158,
+      "fps": 274.6686809051589,
+      "realtime60": 4.577811348419315,
+      "frameCreationMs": 0,
+      "encodedFrames": 0,
+      "encodedBytes": 0,
+      "maxEncodeQueue": 0
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mode": "encode",
+      "frames": 1200,
+      "seconds": 16.267599999964236,
+      "fps": 73.7662593131524,
+      "realtime60": 1.2294376552192068,
+      "frameCreationMs": 0.031999999284744264,
+      "encodedFrames": 1200,
+      "encodedBytes": 112753049,
+      "maxEncodeQueue": 9,
+      "config": {
+        "codec": "avc1.640034",
+        "width": 3840,
+        "height": 2160,
+        "framerate": 60,
+        "bitrate": 45000000,
+        "hardwareAcceleration": "prefer-hardware",
+        "latencyMode": "quality",
+        "avc": {
+          "format": "annexb"
+        }
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "mode": "capture",
+      "frames": 240,
+      "seconds": 0.35610000002384185,
+      "fps": 673.9679864755163,
+      "realtime60": 11.232799774591939,
+      "frameCreationMs": 0.015833333879709244,
+      "encodedFrames": 0,
+      "encodedBytes": 0,
+      "maxEncodeQueue": 0
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "mode": "readback",
+      "frames": 240,
+      "seconds": 0.7544000000357628,
+      "fps": 318.13361610368855,
+      "realtime60": 5.302226935061476,
+      "frameCreationMs": 0.019166666766007742,
+      "encodedFrames": 0,
+      "encodedBytes": 0,
+      "maxEncodeQueue": 0
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mode": "capture",
+      "frames": 240,
+      "seconds": 0.8801999999880791,
+      "fps": 272.66530334384277,
+      "realtime60": 4.54442172239738,
+      "frameCreationMs": 0.014166666815678278,
+      "encodedFrames": 0,
+      "encodedBytes": 0,
+      "maxEncodeQueue": 0
+    },
+    {
+      "width": 3840,
+      "height": 2160,
+      "mode": "readback",
+      "frames": 240,
+      "seconds": 1.6736000000238418,
+      "fps": 143.40344168055748,
+      "realtime60": 2.390057361342625,
+      "frameCreationMs": 0.03541666716337204,
+      "encodedFrames": 0,
+      "encodedBytes": 0,
+      "maxEncodeQueue": 0
+    }
+  ],
+  "machine": {
+    "chip": "Apple M5 Pro",
+    "gpuCores": 20,
+    "memoryGB": 48
+  },
+  "validation": {
+    "sampleWidth": 3840,
+    "sampleHeight": 2160,
+    "sampleFps": 60,
+    "sampleSeconds": 4,
+    "decodedFrames": 240,
+    "distinctDecodedFrames": 240
+  }
+}

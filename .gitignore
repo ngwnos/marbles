@@ -1,0 +1,14 @@
+node_modules/
+dist/
+tmp/
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log
+coverage/
+.wrangler/
+.dev.vars
+.dev.vars.*
+# Diagnostic reports are local outputs, not runtime assets.
+src/generated/*-results.json

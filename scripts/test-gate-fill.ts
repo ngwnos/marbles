@@ -1,0 +1,34 @@
+import assert from 'node:assert/strict';
+import * as T from 'three/webgpu';
+import {createAssemblyPhysics} from '../src/assembly/physics';
+import {createPreviewPhysics} from '../src/preview-physics';
+import {START} from '../src/pieces/start';
+const data=await Bun.file('src/generated/start-collision.json').json();
+for(const yaw of [0,.67]){
+ const sim=await createAssemblyPhysics();
+ sim.registerSurface('start','parts' in data?data.parts:[data]);
+ sim.add(1,'start',[0,200,0],new T.Quaternion().setFromAxisAngle(new T.Vector3(0,1,0),yaw),true);
+ assert.equal(sim.fillGate(1),6);assert.equal(new Set(sim.marbleStates().map(m=>m.color)).size,6);
+ assert.equal(sim.fillGate(1),0);
+ for(let i=0;i<240;i++)sim.step();
+ assert.equal(sim.fillGate(1),0,'Filled occupied lanes twice');
+ assert(sim.marblePositions().every(p=>p.y>280),'Closed gate lost a marble');
+ const gateMarbles=sim.marbleStates().map(m=>m.id);
+ sim.dropMarble([500,8,0]);
+ assert.deepEqual(sim.releaseGate(1),gateMarbles,'Release included marbles outside this gate');
+ for(let i=0;i<1800;i++)sim.step();
+ assert(sim.wheelPose(1)!.angle<-.6,'Gate did not tip');
+ assert(sim.marblePositions().every(p=>p.y<200),'Gate failed to release every marble');
+ assert.deepEqual(sim.releaseGate(1),[],'Empty gate released unrelated marbles');
+ sim.closeGate(1);assert.equal(sim.fillGate(1),6);
+ sim.dispose();console.log('Assembly fill / colors / release / refill passed',yaw);
+}
+const root=new T.Group(),gate=new T.Mesh(new T.BufferGeometry());gate.name='start gate';gate.position.set(START.pivotX,START.pivotY,0);root.add(gate);
+const preview=await createPreviewPhysics(root,'start');preview.fill();
+assert.equal(preview.marbles.length,6);
+assert.equal(new Set(preview.marbles.map(m=>(m.mesh.material as T.MeshPhysicalNodeMaterial).color.getHex())).size,6);
+for(let i=0;i<480;i++)preview.step();
+preview.fill();assert.equal(preview.marbles.length,6);
+preview.release();for(let i=0;i<3600;i++)preview.step();
+assert(preview.marbles.every(m=>m.mesh.position.y<0));
+preview.dispose();gate.geometry.dispose();console.log('Preview fill / colors / release passed');

@@ -1,0 +1,18 @@
+import {loadSolidKernel} from '../src/pieces/solid-kernel';
+import {buildBaseSolid,baseGeometry,BASE} from '../src/pieces/base';
+import {buildSpacerSolid} from '../src/pieces/spacer';
+import {CONNECTOR} from '../src/pieces/marbleworks-spec';
+import {encodePreviewMesh} from '../src/geometry/preview-mesh';
+import {auditRenderMesh} from '../tests/mesh-quality';
+const k=await loadSolidKernel(),solid=buildBaseSolid(k);
+if(solid.status()!=='NoError')throw new Error(solid.status());
+const parts=solid.decompose();if(parts.length!==1)throw new Error('Base must be connected');parts.forEach(p=>p.delete());
+const spacer=buildSpacerSolid(k),mounted=spacer.translate([BASE.postX,BASE.shoulder,0]),intersection=solid.intersect(mounted);
+if(intersection.volume()>.01)throw new Error(`Post fit interferes: ${intersection.volume()} mm3`);
+intersection.delete();mounted.delete();spacer.delete();
+const geometry=baseGeometry(solid);console.log(auditRenderMesh(solid,geometry));
+await Bun.write('src/generated/base.bin',encodePreviewMesh(geometry));
+const collision=buildBaseSolid(k,false),simple=collision.simplify(.025),mesh=simple.getMesh();collision.delete();
+await Bun.write('src/generated/base-collision.json',JSON.stringify({vertices:Array.from(mesh.vertProperties),indices:Array.from(mesh.triVerts)}));
+console.log({triangles:solid.numTri(),colliderTriangles:simple.numTri(),postFit:'clear'});
+simple.delete();solid.delete();geometry.dispose();

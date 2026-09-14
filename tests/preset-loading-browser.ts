@@ -1,0 +1,52 @@
+import type {createBuilder} from '../src/assembly/world';
+import {PRESETS} from '../src/assembly/presets';
+import {createPresetStock} from '../src/assembly/preset-stock';
+import {PIECE_COLORS} from '../src/assembly/piece-colors';
+export async function verifyPresetLoading(builder:Awaited<ReturnType<typeof createBuilder>>){
+ const check=(ok:unknown,message:string)=>{if(!ok)throw new Error(message);};
+ const preset=PRESETS.find(p=>p.id==='tangled-garden')!;
+ const inventory=(items:{kind:string}[])=>items.map(p=>p.kind).sort().join(',');
+ builder.loadPreset(preset.id,'built');
+ let state=builder.inspect();
+ check(state.items.length===preset.pieces.length&&state.items.every(p=>p.fixed),'Built kit is incomplete or contains extra stock');
+ check(state.connections.length===preset.connections.length,'Built connections missing');
+ check(state.items.every(p=>PIECE_COLORS.some(c=>c===p.color)),'Built pieces lack individual colors');
+ check(new Set(state.items.filter(p=>p.kind==='spacer').map(p=>p.color)).size>1,'Copies of the same part all have the same color');
+ const firstColors=state.items.map(p=>p.color);
+ builder.loadPreset(preset.id,'built');state=builder.inspect();
+ check(state.items.some((p,i)=>p.color!==firstColors[i]),'Loading the same preset reused its colors');
+ const checkRecolor=()=>{
+  const before=builder.inspect();builder.randomizeColors();const after=builder.inspect();
+  check(after.items.every((p,i)=>p.color!==before.items[i].color),'Randomize did not recolor every piece');
+  const physical=(s:typeof before)=>({items:s.items.map(({color,...p})=>p),connections:s.connections,holding:s.holding,selected:s.selected});
+  check(JSON.stringify(physical(before))===JSON.stringify(physical(after)),'Recolor changed poses, sleep state, selection, or connections');
+ };
+ checkRecolor();const builtColors=builder.inspect().items.map(p=>p.color);
+ builder.fillGate();check(builder.inspect().marbles.length===6,'Built gate cannot be filled');
+ const begin=performance.now();builder.loadPreset(preset.id,'packed');
+ const milliseconds=performance.now()-begin;state=builder.inspect();
+ check(inventory(state.items)===inventory(preset.pieces),'Packed inventory differs from built inventory');
+ check(!state.connections.length&&state.items.every(p=>!p.fixed&&!p.awake),'Packed kit is connected or awake');
+ check(!state.marbles.length&&!state.selected,'Packed load left old marbles or selected its buried gate');
+ const expected=createPresetStock(preset);
+ check(state.items.every((p,i)=>p.position.every((v,j)=>Math.abs(v-expected[i].position[j])<.001)),'Packed transforms changed while loading');
+ checkRecolor();
+ await new Promise(r=>setTimeout(r,1500));
+ check(builder.inspect().items.every(p=>!p.awake),'Packed kit did not remain at rest');
+ check(builder.loadPreset('grand-tour','packed')===false,'Unsupported pack was accepted');
+ check(builder.inspect().items.length===preset.pieces.length,'Unsupported pack changed the scene');
+ builder.restorePrevious();state=builder.inspect();
+ check(state.items.length===preset.pieces.length&&state.items.every(p=>p.fixed),'Restore did not recover the built layout');
+ check(state.connections.length===preset.connections.length,'Restore lost connections');
+ check(JSON.stringify(state.items.map(p=>p.color))===JSON.stringify(builtColors),'Restore lost piece colors');
+ builder.loadPreset(preset.id,'packed');builder.loadPreset(preset.id,'built');
+ check(builder.inspect().items.length===preset.pieces.length,'Switching from packed to built duplicated the kit');
+ await builder.refillTub(2026);state=builder.inspect();
+ check(state.items.length>preset.pieces.length&&state.items.every(p=>PIECE_COLORS.some(c=>c===p.color)),'Refilled tub has uncolored parts');
+ checkRecolor(); // A mixed scene: connected kit plus loose random stock.
+ builder.begin('paddle',builder.project([0,100,0]));
+ check(builder.inspect().holding!==undefined,'Could not create a tray piece');
+ checkRecolor();builder.cancel();
+ builder.loadPreset(preset.id,'packed');
+ return {pieces:preset.pieces.length,milliseconds,result:'PASS: built/packed loads, inventory, sleeping poses, no duplication; random colors on creation and reload; recolor built, packed, mixed, and held pieces; restore colors and physics unchanged'};
+}

@@ -1,0 +1,40 @@
+--- a/src/physics_world.h
++++ b/src/physics_world.h
+@@ -313,6 +313,15 @@
+ 		return NULL;
+ 	}
+ 
++	// Detailed concave meshes may produce many contact clusters. Do not create
++	// a pool for every intervening size, each preallocating hundreds of arrays.
++	if ( count > 8 )
++	{
++		b3Manifold* result = b3Alloc( count * sizeof( b3Manifold ) );
++		memset( result, 0, count * sizeof( b3Manifold ) );
++		return result;
++	}
++
+ 	int index = count - 1;
+ 
+ 	// Need lock because this is called from the parallel narrow phase
+@@ -320,7 +329,7 @@
+ 	int currentCount = world->manifoldAllocators.count;
+ 	for ( int i = currentCount; i < count; ++i )
+ 	{
+-		b3BlockAllocator allocator = b3CreateBlockAllocator( ( i + 1 ) * sizeof( b3Manifold ), 2 * B3_BLOCK_SIZE );
++		b3BlockAllocator allocator = b3CreateBlockAllocator( ( i + 1 ) * sizeof( b3Manifold ), 0 );
+ 		b3Array_Push( world->manifoldAllocators, allocator );
+ 	}
+ 
+@@ -338,6 +347,12 @@
+ 		return;
+ 	}
+ 
++	if ( count > 8 )
++	{
++		b3Free( manifolds, count * sizeof( b3Manifold ) );
++		return;
++	}
++
+ 	int index = count - 1;
+ 	b3LockMutex( world->manifoldAllocatorMutex );
+ 	b3BlockAllocator* allocator = b3Array_Get( world->manifoldAllocators, index );

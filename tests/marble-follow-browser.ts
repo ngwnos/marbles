@@ -1,0 +1,46 @@
+import type {createBuilder} from '../src/assembly/world';
+import {Quaternion,Vector3} from 'three/webgpu';
+import {PART_UNITS} from '../src/pieces/marbleworks-spec';
+
+export async function verifyMarbleFollow(builder:Awaited<ReturnType<typeof createBuilder>>){
+ const root=document.documentElement;root.dataset.followTest='running';
+ const check=(ok:unknown,message:string)=>{if(!ok){root.dataset.followTest='failed: '+message;throw new Error(message);}};
+ const wait=(ms:number)=>new Promise(r=>setTimeout(r,ms));
+ Object.assign(window,{followTestBuilder:builder});
+ const offset=()=>{const c=builder.inspect().camera;return new Vector3(...c.position).sub(new Vector3(...c.target));};
+ builder.loadPreset('split-rejoin');builder.fillGate();await wait(500);
+ const before=builder.inspect().camera,orbit=offset();
+ [...document.querySelectorAll<HTMLButtonElement>('button')].find(b=>b.textContent==='Release')!.click();
+ const released=builder.inspect().camera;
+ check(released.following!==undefined,'Release did not pick a marble');
+ check(JSON.stringify(released.target)===JSON.stringify(before.target),'Release snapped target');
+ await wait(100);
+ check(new Vector3(...builder.inspect().camera.target).distanceTo(new Vector3(...before.target))>1,'Orbit target did not begin slewing');
+ check(offset().length()<orbit.length(),'Follow did not begin zooming in');
+ const directionBefore=offset().normalize();
+ await wait(2500);
+ check(Math.abs(offset().length()-2*PART_UNITS.portSpan)<3,'Follow did not reach its close view');
+ check(directionBefore.distanceTo(offset().normalize())>.03,'Follow never moved around the marble');
+ const deadline=performance.now()+60000;
+ while(builder.inspect().camera.marbleFinish===undefined&&performance.now()<deadline)await wait(250);
+ check(builder.inspect().camera.marbleFinish!==undefined,'Followed marble did not reach the finish');
+ await wait(3500);
+ const finished=builder.inspect(),finish=finished.items.find(p=>p.id===finished.camera.marbleFinish)!;
+ const front=new Vector3(1,0,0).applyQuaternion(new Quaternion(...finish.rotation));
+ check(offset().setY(0).normalize().dot(front)>.995,'Final camera does not face the finish from its front');
+ const rest=offset();await wait(800);check(offset().distanceTo(rest)<.5,'Camera continues orbiting after arrival');
+ const canvas=document.querySelector<HTMLCanvasElement>('.assembly-world canvas')!;
+ canvas.dispatchEvent(new WheelEvent('wheel',{deltaY:-160,bubbles:true,cancelable:true,clientX:canvas.clientWidth/2,clientY:canvas.clientHeight/2}));
+ await wait(400);
+ check(offset().length()<rest.length()-1,'Follow prevented zooming');
+ check(builder.inspect().camera.following===released.following,'Zoom cancelled following');
+ const zoomed=offset();await wait(1500);
+ check(offset().distanceTo(zoomed)<.001,'Follow reset user zoom');
+ check(!builder.inspect().camera.marbleAutomatic,'Manual input did not release automatic framing');
+ const state=builder.inspect(),target=new Vector3(...state.camera.target);
+ check(Math.min(...state.marbles.map(p=>target.distanceTo(new Vector3(...p))))<80,'Camera failed to track the released marble');
+ builder.loadPreset('split-rejoin');
+ check(builder.inspect().camera.following===undefined,'Replacing layout retained a stale follow');
+ root.dataset.followTest='passed';
+ document.querySelector('[role=status]')!.textContent='TEST PASSED: close follow, moving orbit, finish front view and manual zoom';
+}
